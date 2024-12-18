@@ -26,10 +26,11 @@ public class Spawner : MonoBehaviour
         
     }
 
-    public void createTrash(GameObject trash)
-    {
-        Instantiate(trash, transform.position, Quaternion.identity);
-    }
+    // public void createTrash(GameObject trash)
+    // {
+    //     GameObject spawnPoint = new GameObject();
+    //     Instantiate(trash, spawnerPoint.transform);
+    // }
 
     // Update is called once per frame
     void Update()
