@@ -1,34 +1,49 @@
 using UnityEngine;
+using TMPro;
 
 public class TrashBin : MonoBehaviour
 {
-    [SerializeField] private string acceptedTag; // Tag des objets acceptés par la poubelle
-    [SerializeField] private AudioClip successSound; // Son de succès (objet bien trié)
-    [SerializeField] private AudioClip errorSound; // Son d'erreur (objet mal trié)
-    [SerializeField] private AudioSource audioSource; // AudioSource qui jouera le son
+    public string acceptedTag;
+    public TMP_Text scoreText;
+    public AudioClip successSound;
+    public AudioClip errorSound;
+
+    private AudioSource audioSource;
+    private int score = 0;
+
+    private void Start()
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
 
     private void OnTriggerEnter(Collider other)
     {
-        // Vérifie si l'objet qui entre dans la zone a le bon tag
         if (other.CompareTag(acceptedTag))
         {
-            // Si l'objet est le bon, joue le son de succès
-            Debug.Log("Bon tri ! Objet accepté : " + other.name);
-
-            if (audioSource != null && successSound != null)
-            {
-                audioSource.PlayOneShot(successSound); // Joue le son de succès
-            }
+            score++;
+            UpdateScoreText();
+            audioSource.PlayOneShot(successSound);
+            Destroy(other.gameObject);
         }
         else
         {
-            // Si l'objet est incorrect, joue le son d'erreur
-            Debug.Log("Erreur de tri. Objet incorrect : " + other.name);
+                    Debug.Log("Mauvais tri détecté. Tag : " + other.tag + " | Tag attendu : " + acceptedTag);
 
-            if (audioSource != null && errorSound != null)
+            audioSource.PlayOneShot(errorSound);
+            if (score > 0)
             {
-                audioSource.PlayOneShot(errorSound); // Joue le son d'erreur
+                score--;
+                UpdateScoreText();
             }
+            
+        }
+    }
+
+    private void UpdateScoreText()
+    {
+        if (scoreText != null)
+        {
+            scoreText.text = "Score: " + score;
         }
     }
 }
