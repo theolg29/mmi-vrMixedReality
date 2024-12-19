@@ -7,6 +7,9 @@ TagManager:
   - Plastique
   - Controller
   - Verre
+  - Water
+  - no-recycle
+  - yes-recycle
   layers:
   - Default
   - TransparentFX

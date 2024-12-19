@@ -6,10 +6,18 @@ public class Spawner : MonoBehaviour
 {
     public static Spawner Instance { get; private set; }
 
-    public GameObject trash;
+    [Header("Prefab à instancier")]
+    public GameObject trash; // L'objet à spawn
 
-    public void Awake()
+    [Header("Points de spawn")]
+    public Transform[] spawnPoints; // Liste des positions possibles pour spawn
+
+    [Header("Intervalle de spawn")]
+    public float spawnInterval = 2f; // Temps entre chaque spawn
+
+    private void Awake()
     {
+        // Singleton pattern
         if (Instance == null)
         {
             Instance = this;
@@ -20,21 +28,25 @@ public class Spawner : MonoBehaviour
         }
     }
 
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        
+        // Lancer le spawner à intervalles réguliers
+        InvokeRepeating(nameof(SpawnTrash), spawnInterval, spawnInterval);
     }
 
-    // public void createTrash(GameObject trash)
-    // {
-    //     GameObject spawnPoint = new GameObject();
-    //     Instantiate(trash, spawnerPoint.transform);
-    // }
-
-    // Update is called once per frame
-    void Update()
+    public void SpawnTrash()
     {
-        
+        if (spawnPoints.Length == 0 || trash == null)
+        {
+            Debug.LogWarning("Aucun point de spawn ou prefab assigné au Spawner.");
+            return;
+        }
+
+        // Choisir un point de spawn aléatoire
+        int randomIndex = Random.Range(0, spawnPoints.Length);
+        Transform spawnPoint = spawnPoints[randomIndex];
+
+        // Instancier l'objet au point de spawn
+        Instantiate(trash, spawnPoint.position, spawnPoint.rotation);
     }
 }

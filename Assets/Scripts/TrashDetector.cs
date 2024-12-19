@@ -1,7 +1,7 @@
 using UnityEngine;
 using TMPro;
 
-public class TrashBin : MonoBehaviour
+public class TrashDetector : MonoBehaviour
 {
     public string acceptedTag;
     public TMP_Text scoreText;
@@ -18,6 +18,12 @@ public class TrashBin : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+
+        if (other.CompareTag("Player"))
+        {
+            return;
+        }
+
         if (other.CompareTag(acceptedTag))
         {
             score++;
@@ -27,7 +33,6 @@ public class TrashBin : MonoBehaviour
         }
         else
         {
-                    Debug.Log("Mauvais tri détecté. Tag : " + other.tag + " | Tag attendu : " + acceptedTag);
 
             audioSource.PlayOneShot(errorSound);
             if (score > 0)
